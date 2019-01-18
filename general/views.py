@@ -13,12 +13,15 @@ from rest_framework.decorators import action
 from .models import Merchant
 from .serializers import MerchantSerializer
 
-class MerchantViewSet(viewsets.ReadOnlyModelViewSet):
+class MerchantViewSet(viewsets.ModelViewSet):
     """
     This viewset automatically provides `list` and `detail` actions.
     """
     queryset = Merchant.objects.all()
     serializer_class = MerchantSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
+    def perform_create(self, serializer):
+        serializer.save()
 
 @api_view(['GET'])
 def api_root(request, format=None):

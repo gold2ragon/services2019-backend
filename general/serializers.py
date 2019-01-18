@@ -7,3 +7,4 @@ class MerchantSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Merchant
+        fields = '__all__'
