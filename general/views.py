@@ -23,6 +23,10 @@ class MerchantViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save()
 
+    def perform_update(self, serializer):
+        instance = serializer.save()
+        # send_email_confirmation(user=self.request.user, modified=instance)
+
 @api_view(['GET'])
 def api_root(request, format=None):
     return Response({
