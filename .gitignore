@@ -1,2 +1,5 @@
+README.md
 images
 staticfiles
+db.sqlite3
+*.md

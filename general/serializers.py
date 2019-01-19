@@ -1,12 +1,19 @@
 from rest_framework import serializers
+from rest_framework.response import Response
+from django.contrib.auth.validators import UnicodeUsernameValidator
 from .models import *
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('username', 'name', 'surname', 'email', 'tel', 'address')
+        extra_kwargs = {
+            'username': {
+                'validators': [UnicodeUsernameValidator()],
+            }
+        }
 
-class MerchantSerializer(serializers.HyperlinkedModelSerializer):
+class MerchantSerializer(serializers.ModelSerializer):
     user = UserSerializer(required=True)
     class Meta:
         model = Merchant
@@ -26,6 +33,39 @@ class MerchantSerializer(serializers.HyperlinkedModelSerializer):
                             reg=validated_data.pop('reg'), 
                             vat=validated_data.pop('vat'), 
                             iban=validated_data.pop('iban'),
-                            description=validated_data.pop('description'), 
-                            photo_url=validated_data.pop('photo_url'),  )
+                            description=validated_data.pop('description'), )
+        try:
+            merchant.photo_url=validated_data.pop('photo_url')
+            merchant.save()
+        except:
+            pass    
         return merchant
+    
+    def update(self, instance, validated_data):
+        user_data = validated_data.pop('user')
+        username = user_data.pop('username')
+        if instance.user.username != username:
+            users = User.objects.filter(username=username)
+            if users.count() > 0:
+                raise serializers.ValidationError("username already exists.")
+        user = User.objects.get_or_create(username=username)[0]
+        user.name = user_data['name']
+        user.surname = user_data['surname']
+        user.email = user_data['email']
+        user.tel = user_data['tel']
+        user.address = user_data['address']
+        user.save()
+        instance.user = user
+        instance.company_name = validated_data['company_name']
+        instance.autoservice_name = validated_data['autoservice_name']
+        instance.reg = validated_data['reg']
+        instance.vat = validated_data['vat']
+        instance.iban = validated_data['iban']
+        instance.description = validated_data['description']
+        request = self.context.get('request')
+        image = request.data['photo_url']
+        
+        if(type(image) is not str):
+            instance.photo_url.save(image.name, image, save=True)
+
+        return instance

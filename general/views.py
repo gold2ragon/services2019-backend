@@ -20,15 +20,16 @@ class MerchantViewSet(viewsets.ModelViewSet):
     queryset = Merchant.objects.all()
     serializer_class = MerchantSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
-    def perform_create(self, serializer):
-        serializer.save()
+    # def perform_create(self, serializer):
+    #     serializer.save()
 
-    def perform_update(self, serializer):
-        instance = serializer.save()
+    # def perform_update(self, serializer):
+    #     print('update----------')
+    #     instance = serializer.save()
         # send_email_confirmation(user=self.request.user, modified=instance)
 
-@api_view(['GET'])
+@api_view(['GET', 'PUT', 'DELETE'])
 def api_root(request, format=None):
     return Response({
-        'merchants': reverse('merchant-list', request=request, format=format)
+        'merchants': reverse('merchant-list', request=request, format=format, partial=True)
     })
