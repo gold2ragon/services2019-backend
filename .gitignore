@@ -3,3 +3,4 @@ images
 staticfiles
 db.sqlite3
 *.md
+general/__pychache__
