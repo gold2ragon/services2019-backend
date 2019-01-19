@@ -73,6 +73,7 @@ class CarList(models.Model):
 
 class Car(models.Model):
     owner = models.ForeignKey('User', on_delete=models.SET_NULL, null=True)
+    car_type = models.ForeignKey('CarList', on_delete=models.SET_NULL, null=True, verbose_name="Car Type")
     vin = models.CharField(max_length=36)
     car_number = models.CharField(max_length=36)
 

@@ -10,26 +10,75 @@ from rest_framework.reverse import reverse
 from rest_framework import viewsets
 from rest_framework.decorators import action
 
-from .models import Merchant
-from .serializers import MerchantSerializer
+from .models import *
+from .serializers import *
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
 
 class MerchantViewSet(viewsets.ModelViewSet):
-    """
-    This viewset automatically provides `list` and `detail` actions.
-    """
     queryset = Merchant.objects.all()
     serializer_class = MerchantSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
-    # def perform_create(self, serializer):
-    #     serializer.save()
 
-    # def perform_update(self, serializer):
-    #     print('update----------')
-    #     instance = serializer.save()
-        # send_email_confirmation(user=self.request.user, modified=instance)
+class BusinessUserViewSet(viewsets.ModelViewSet):
+    queryset = BusinessUser.objects.all()
+    serializer_class = BusinessUserSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
 
-@api_view(['GET', 'PUT', 'DELETE'])
-def api_root(request, format=None):
-    return Response({
-        'merchants': reverse('merchant-list', request=request, format=format, partial=True)
-    })
+class BookingViewSet(viewsets.ModelViewSet):
+    queryset = Booking.objects.all()
+    serializer_class = BookingSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
+
+class ChatViewSet(viewsets.ModelViewSet):
+    queryset = Chat.objects.all()
+    serializer_class = ChatSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
+
+class CarMakeViewSet(viewsets.ModelViewSet):
+    queryset = CarMake.objects.all()
+    serializer_class = CarMakeSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
+
+class CarModelViewSet(viewsets.ModelViewSet):
+    queryset = CarModel.objects.all()
+    serializer_class = CarModelSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
+    
+class CarFuelViewSet(viewsets.ModelViewSet):
+    queryset = CarFuel.objects.all()
+    serializer_class = CarFuelSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
+
+class CarTransmissionViewSet(viewsets.ModelViewSet):
+    queryset = CarTransmission.objects.all()
+    serializer_class = CarTransmissionSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
+
+class CarListViewSet(viewsets.ModelViewSet):
+    queryset = CarList.objects.all()
+    serializer_class = CarListSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
+    
+class CarViewSet(viewsets.ModelViewSet):
+    queryset = Car.objects.all()
+    serializer_class = CarSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
+    
+class ServiceListViewSet(viewsets.ModelViewSet):
+    queryset = ServiceList.objects.all()
+    serializer_class = ServiceListSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
+    
+class RequestViewSet(viewsets.ModelViewSet):
+    queryset = Request.objects.all()
+    serializer_class = RequestSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
+    
+class ServiceHistoryViewSet(viewsets.ModelViewSet):
+    queryset = ServiceHistory.objects.all()
+    serializer_class = ServiceHistorySerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
